@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
+    <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+    body{
+        background-color: rgb(242, 237, 237);
+       
+    }
+    .lds-roller {
+          /* change color here */
+          color: #1c4c5b
+        }
+        .lds-roller,
+        .lds-roller div,
+        .lds-roller div:after {
+          box-sizing: border-box;
+        }
+        .lds-roller {
+          display: inline-block;
+          position: relative;
+          width: 80px;
+          height: 80px;
+        }
+        .lds-roller div {
+          animation: lds-roller 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+          transform-origin: 40px 40px;
+        }
+        .lds-roller div:after {
+          content: " ";
+          display: block;
+          position: absolute;
+          width: 7.2px;
+          height: 7.2px;
+          border-radius: 50%;
+          background: currentColor;
+          margin: -3.6px 0 0 -3.6px;
+        }
+        .lds-roller div:nth-child(1) {
+          animation-delay: -0.036s;
+        }
+        .lds-roller div:nth-child(1):after {
+          top: 62.62742px;
+          left: 62.62742px;
+        }
+        .lds-roller div:nth-child(2) {
+          animation-delay: -0.072s;
+        }
+        .lds-roller div:nth-child(2):after {
+          top: 67.71281px;
+          left: 56px;
+        }
+        .lds-roller div:nth-child(3) {
+          animation-delay: -0.108s;
+        }
+        .lds-roller div:nth-child(3):after {
+          top: 70.90963px;
+          left: 48.28221px;
+        }
+        .lds-roller div:nth-child(4) {
+          animation-delay: -0.144s;
+        }
+        .lds-roller div:nth-child(4):after {
+          top: 72px;
+          left: 40px;
+        }
+        .lds-roller div:nth-child(5) {
+          animation-delay: -0.18s;
+        }
+        .lds-roller div:nth-child(5):after {
+          top: 70.90963px;
+          left: 31.71779px;
+        }
+        .lds-roller div:nth-child(6) {
+          animation-delay: -0.216s;
+        }
+        .lds-roller div:nth-child(6):after {
+          top: 67.71281px;
+          left: 24px;
+        }
+        .lds-roller div:nth-child(7) {
+          animation-delay: -0.252s;
+        }
+        .lds-roller div:nth-child(7):after {
+          top: 62.62742px;
+          left: 17.37258px;
+        }
+        .lds-roller div:nth-child(8) {
+          animation-delay: -0.288s;
+        }
+        .lds-roller div:nth-child(8):after {
+          top: 56px;
+          left: 12.28719px;
+        }
+        @keyframes lds-roller {
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(360deg);
+          }
+      }    
+    </style>
+    <script src="node_modules/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <div id="loader" style="position: fixed; top: 0; bottom: 0; left: 0; right: 0; margin: auto auto; width: 100px; height: 100px; background-color: rgba(128, 128, 128, 0.526); z-index: 9999; border-radius: 20px; display: flex; justify-content: center;align-items: center;">
+        <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+        </div>
+    </div>
+    <div id="problem">
+        <div  id="liveAlertPlaceholder" class="show fade" style="width: 30%; position: fixed; bottom:0; right:0; z-index: 4444;"></div>
+      </div>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Login</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form>
+            <div class="mb-3">
+                <label for="recipient-name" class="col-form-label">username</label>
+                <input type="text" class="form-control" id="username-input" value="mahyeldin">
+            </div>
+            <div class="mb-3">
+                <label for="message-text" class="col-form-label">password:</label>
+                <input type="password" class="form-control" id="password-input" value="123456">
+            </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" onclick="loginfunc()">Login</button>
+        </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">register</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form>
+            <label for="recipient-name" class="col-form-label"><b>profile image</b></label>
+            <div class="input-group mb-3">
+                <input type="file" class="form-control" id="regist-image">
+            </div>
+            <div class="mb-3 input-group">
+                <input type="text" class="form-control" id="regist-name-input" placeholder="name" value="abdou">
+            </div>
+            <div class="mb-3 input-group">
+                <input type="text" class="form-control" id="regist-username-input" placeholder="username" value="mahyeldin">
+            </div>
+            <div class="mb-3 input-group">
+                <span class="input-group-text">@</span>
+                <input type="text" class="form-control" id="regist-gmail-input" placeholder="gmail" value="mahyeldin@gmail.com" >
+            </div>
+            <div class="mb-3 input-group">
+                <input type="password" class="form-control" id="regist-password-input"  placeholder="password" value="123456">
+            </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" onclick="register()">register</button>
+        </div>
+        </div>
+    </div>
+    </div>
+
+    <div class="modal fade" id="postModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Creat New Post</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form>
+            <div class="mb-3">
+                <label for="recipient-name" class="col-form-label">Title</label>
+                <input type="text" class="form-control" id="title-input" value="">
+            </div>
+            <div class="mb-3">
+                <label for="recipient-name" class="col-form-label">Body</label>
+                <input type="text" class="form-control" id="body-input" value="">
+            </div>
+            <div class="mb-3">
+                <input type="file" class="form-control" id="post-image">
+            </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" onclick="creatnewpost()">Creat</button>
+        </div>
+        </div>
+    </div>
+    </div>
+
+    <div class="container" style="width: 65%;">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-lg">
+            <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">Tarmeez</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="index.html">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="profile.html" id="profilebtn">profile</a>
+                </li>
+                </ul>
+
+            </div>
+            <div id="btn" class="d-flex justify-content-end">
+                <div >
+                    <button  class="btn btn-outline-success mx-3 " data-bs-toggle="modal" data-bs-target="#exampleModal">login</button>
+                    <button class="btn btn-outline-success ">register</button>
+                </div>
+                <div>
+                    <img src="" alt="">
+                    <button  class="btn btn-outline-danger mx-3 " data-bs-toggle="modal" data-bs-target="#exampleModal">logout</button>
+                </div>
+            </div>
+            </div>
+        </nav>
+    </div> 
+
+    <div class="container mt-4" style="width: 65%;" id="post" >
+        <div class="head">
+            <h2>
+                <span>mahyeldin</span>
+                user
+            </h2>
+        </div>
+        <div class="card mt-3 mb-3">
+            <div class="card-header">
+              <img src="img/1254808.webp" alt="" style="width: 20px; height: 20px;">
+              <b class="mx-1">ahmed</b>
+            </div>
+            <div class="card-body">
+             <img style="width: 100%; height: 250px;" src="img/lone-tree-1934897_640.jpg" alt="">
+             <h6 style="color: rgb(168, 167, 167);" class="mt-2">2min ago</h6>
+             <h4 >hello world</h4>
+             <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quae magni commodi cum itaque eius laboriosam saepe deserunt minima, voluptatem architecto! Dolorum sunt voluptatem aspernatur, nesciunt adipisci est velit et? Expedita!</p>
+             <hr>
+             <div>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16">
+                <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001m-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708z"/>
+              </svg>
+              <span>(3) comment</span>
+              <div style="display: inline-block;">
+                <button type="button" class="btn btn-dark rounded-pill mx-2">sport</button>
+              </div>
+             </div>
+            </div>
+            <div style="background-color: rgb(237, 231, 231);"  class="p-3 ">
+              <div id="comment" class="mb-2 p-2 px-5 rounded-pill" style="background-color: rgb(164, 158, 158);">
+                <div>
+                    <img class="rounded-circle" src="img/1254808.webp" alt="" style="width: 20px; height: 20px; ">
+                    <b>mahmod</b>
+                </div>
+                <div>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. N
+                </div>
+              </div>
+            </div>
+            <div class="input-group">
+                <input id="comment-value" type="text" class="form-control" placeholder="add a comment" aria-label="Recipient's username" aria-describedby="button-addon2">
+                <button onclick="creatnewcomment()" class="btn btn-outline-secondary" type="button" id="button-addon2">creat</button>
+           </div>
+        </div>
+        
+ 
+    </div>
+</body >
+<script src="main.js"></script>
+<script>
+    const urlparams = new URLSearchParams(window.location.search)
+    const id = urlparams.get('userid');
+    updatui()
+    function showpost(){
+        toggleloader()
+        axios.get(`http://tarmeezacademy.com/api/v1/posts/${id}`)
+        .then((responses)=>{
+            toggleloader(false)
+            element = responses.data.data;
+            let content =''
+            let contentTag = ''
+            let commentbody = '';
+            comments = element.comments;
+            for (comment of comments){
+                commentbody += `
+                <div id="comment" class="mb-2 p-2 ps-4 rounded-pill" style="background-color: rgb(164, 158, 158);">
+                    <div>
+                        <img class="rounded-circle" src="${comment.author.profile_image}" alt="" style="width: 20px; height: 20px; ">
+                        <b>${comment.author.username}</b>
+                    </div>
+                    <div>
+                        ${comment.body}
+                    </div>
+              </div>`
+            }
+            content +=`
+                <div class="head">
+                    <h2>
+                        <span>${element.author.username}</span>
+                        user
+                    </h2>
+                </div>
+                <div class="card mt-3 mb-3" >
+                    <div class="card-header">
+                        <img src="${element.author.profile_image}" alt="" style="width: 20px; height: 20px;">
+                        <b class="mx-1">${element.author.username}</b>
+                    </div>
+                    <div class="card-body">
+                        <img style="width: 100%; height: 250px;" src="${element.image}" alt="">
+                        <h6 style="color: rgb(168, 167, 167);" class="mt-2">${element.created_at}</h6>
+                        <h4 >${element.title}</h4>
+                        <p>${element.body}</p>
+                        <hr>
+                        <div>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16">
+                                <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001m-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708z"/>
+                            </svg>
+                            <span>(${element.comments_count}) comment</span>
+                            <div style="display: inline-block;">
+                                ${contentTag}
+                            </div>
+                        </div>
+                    </div>
+                </div>  
+                <div style="background-color: rgb(237, 231, 231);"  class="p-3">
+                ${commentbody}
+                </div>
+                <div class="input-group mb-3">
+                    <input id="comment-value" type="text" class="form-control" placeholder="add a comment" aria-label="Recipient's username" aria-describedby="button-addon2">
+                    <button onclick="creatnewcomment()" class="btn btn-outline-secondary" type="button" id="button-addon2">creat</button>
+                </div>
+            `
+            post.innerHTML = content; 
+        })     
+    }
+    
+    function creatnewcomment(){
+        toggleloader()
+        const commentText = document.getElementById('comment-value').value;
+        let config = {
+            headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        }
+        const params ={
+            "body":commentText
+        }
+        axios.post(`https://tarmeezacademy.com/api/v1/posts/${id}/comments`, params,config)
+        .then(requst=>{
+            toggleloader(false)
+            showpost()
+        })
+        .catch(error=>{
+            console.log(error)
+            showmessage(error.response.data.message,'danger')
+            setTimeout(()=>{
+                const alert = bootstrap.Alert.getOrCreateInstance('#liveAlertPlaceholder')
+                alert.close()
+            },2000)
+        })
+    }
+    showpost(id)
+
+</script>
+</html>
